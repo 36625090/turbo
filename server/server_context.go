@@ -23,30 +23,6 @@ type TurboContext struct {
 	Transport *transport.Transport
 }
 
-
-//initContext 初始化gin服务中间件
-func (m *Server) initContext() error {
-	m.httpTransport.Use(m.requestTracer())
-
-	if m.opts.Newrelic {
-		m.httpTransport.Use(m.newrelicTracer())
-	}
-
-
-	if err := m.initContext(); err != nil {
-		return err
-	}
-
-	m.initBackendAPIServer()
-
-	if m.opts.Ui {
-		m.addDocumentSchema()
-		m.addDocumentUI()
-	}
-
-	return nil
-}
-
 func (m *Server) requestTracer() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
