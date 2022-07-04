@@ -327,16 +327,16 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"docs/3rdpartylicenses.txt":              docs3rdpartylicensesTxt,
-	"docs/assets/atom-one-dark.min.css":      docsAssetsAtomOneDarkMinCss,
-	"docs/assets/highlight.min.js":           docsAssetsHighlightMinJs,
-	"docs/favicon.ico":                       docsFaviconIco,
-	"docs/index.html":                        docsIndexHtml,
-	"docs/main.d5972cb587732b551d54.js":      docsMainD5972cb587732b551d54Js,
+	"docs/3rdpartylicenses.txt": docs3rdpartylicensesTxt,
+	"docs/assets/atom-one-dark.min.css": docsAssetsAtomOneDarkMinCss,
+	"docs/assets/highlight.min.js": docsAssetsHighlightMinJs,
+	"docs/favicon.ico": docsFaviconIco,
+	"docs/index.html": docsIndexHtml,
+	"docs/main.d5972cb587732b551d54.js": docsMainD5972cb587732b551d54Js,
 	"docs/polyfills.35a5ca1855eb057f016a.js": docsPolyfills35a5ca1855eb057f016aJs,
-	"docs/runtime.acf0dec4155e77772545.js":   docsRuntimeAcf0dec4155e77772545Js,
-	"docs/scripts.3b9ab9d618b784322c5c.js":   docsScripts3b9ab9d618b784322c5cJs,
-	"docs/styles.ef126d02e58311d69741.css":   docsStylesEf126d02e58311d69741Css,
+	"docs/runtime.acf0dec4155e77772545.js": docsRuntimeAcf0dec4155e77772545Js,
+	"docs/scripts.3b9ab9d618b784322c5c.js": docsScripts3b9ab9d618b784322c5cJs,
+	"docs/styles.ef126d02e58311d69741.css": docsStylesEf126d02e58311d69741Css,
 }
 
 // AssetDir returns the file names below a certain
@@ -378,21 +378,20 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"docs": &bintree{nil, map[string]*bintree{
 		"3rdpartylicenses.txt": &bintree{docs3rdpartylicensesTxt, map[string]*bintree{}},
 		"assets": &bintree{nil, map[string]*bintree{
 			"atom-one-dark.min.css": &bintree{docsAssetsAtomOneDarkMinCss, map[string]*bintree{}},
-			"highlight.min.js":      &bintree{docsAssetsHighlightMinJs, map[string]*bintree{}},
+			"highlight.min.js": &bintree{docsAssetsHighlightMinJs, map[string]*bintree{}},
 		}},
-		"favicon.ico":                       &bintree{docsFaviconIco, map[string]*bintree{}},
-		"index.html":                        &bintree{docsIndexHtml, map[string]*bintree{}},
-		"main.d5972cb587732b551d54.js":      &bintree{docsMainD5972cb587732b551d54Js, map[string]*bintree{}},
+		"favicon.ico": &bintree{docsFaviconIco, map[string]*bintree{}},
+		"index.html": &bintree{docsIndexHtml, map[string]*bintree{}},
+		"main.d5972cb587732b551d54.js": &bintree{docsMainD5972cb587732b551d54Js, map[string]*bintree{}},
 		"polyfills.35a5ca1855eb057f016a.js": &bintree{docsPolyfills35a5ca1855eb057f016aJs, map[string]*bintree{}},
-		"runtime.acf0dec4155e77772545.js":   &bintree{docsRuntimeAcf0dec4155e77772545Js, map[string]*bintree{}},
-		"scripts.3b9ab9d618b784322c5c.js":   &bintree{docsScripts3b9ab9d618b784322c5cJs, map[string]*bintree{}},
-		"styles.ef126d02e58311d69741.css":   &bintree{docsStylesEf126d02e58311d69741Css, map[string]*bintree{}},
+		"runtime.acf0dec4155e77772545.js": &bintree{docsRuntimeAcf0dec4155e77772545Js, map[string]*bintree{}},
+		"scripts.3b9ab9d618b784322c5c.js": &bintree{docsScripts3b9ab9d618b784322c5cJs, map[string]*bintree{}},
+		"styles.ef126d02e58311d69741.css": &bintree{docsStylesEf126d02e58311d69741Css, map[string]*bintree{}},
 	}},
 }}
 
@@ -442,3 +441,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+
