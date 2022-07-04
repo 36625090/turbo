@@ -9,7 +9,6 @@ import (
 type Authorized struct {
 	ID           string    `json:"id" name:"账户ID"`
 	Account      string    `json:"account" name:"账户名称"`
-	AccountRoles []string  `json:"roles" name:"用户角色"`
 	Principal    Principal `json:"principal" name:"账户凭证(用户信息)"`
 }
 
