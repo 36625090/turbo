@@ -38,12 +38,6 @@ type Server struct {
 	signalChan    chan os.Signal
 }
 
-func (m *Server) AddLoggerSinks(sinks ...hclog.SinkAdapter) {
-	for _, sink := range sinks {
-		m.logger.RegisterSink(sink)
-	}
-}
-
 func NewServer(opts *option.Options, cfg *config.GlobalConfig, cl consul.Client, logger hclog.InterceptLogger) *Server {
 
 	gin.SetMode(gin.ReleaseMode)
@@ -64,24 +58,8 @@ func NewServer(opts *option.Options, cfg *config.GlobalConfig, cl consul.Client,
 	}
 }
 
-func (m *Server) Initialize() error {
-
-	if err := m.initContext(); err != nil {
-		return err
-	}
-
-	m.initBackendAPIServer()
-
-	if m.opts.Ui {
-		m.addDocumentSchema()
-		m.addDocumentUI()
-	}
-
-	return nil
-}
-
-//RegisterAuthorization 注册验证代理接口，如不需要课不注册
-func (m *Server) RegisterAuthorization(authorization authorities.Authorization) error {
+//InitializeAuthorization 注册验证代理接口，如不需要课不注册
+func (m *Server) InitializeAuthorization(authorization authorities.Authorization) error {
 	m.authorization = authorization
 	return nil
 }

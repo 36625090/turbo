@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+
 //initContext 初始化gin服务中间件
 func (m *Server) initContext() error {
 	m.httpTransport.Use(m.requestTracer())
@@ -15,6 +16,19 @@ func (m *Server) initContext() error {
 	if m.opts.Newrelic {
 		m.httpTransport.Use(m.newrelicTracer())
 	}
+
+
+	if err := m.initContext(); err != nil {
+		return err
+	}
+
+	m.initBackendAPIServer()
+
+	if m.opts.Ui {
+		m.addDocumentSchema()
+		m.addDocumentUI()
+	}
+
 	return nil
 }
 

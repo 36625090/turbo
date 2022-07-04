@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func (m *Server) RegisterBackend(bkName string, factory logical.Factory, cfg *logical.BackendContext) error {
+func (m *Server) InitializeBackend(bkName string, factory logical.Factory, cfg *logical.BackendContext) error {
 	m.Lock()
 	defer m.Unlock()
 	if _, ok := m.backends[bkName]; ok {

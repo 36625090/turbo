@@ -6,6 +6,7 @@ import (
 	"github.com/36625090/turbo/example/services/account/controller"
 	"github.com/36625090/turbo/logical"
 	"github.com/36625090/turbo/option"
+	"github.com/36625090/turbo/server"
 	"log"
 	"os"
 )
@@ -32,6 +33,10 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+
+	inv.Initialize(func(ctx *server.TurboContext) {
+
+	})
 
 	if err := inv.Start(); err != nil {
 		log.Fatal(err)

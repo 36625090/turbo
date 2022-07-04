@@ -8,7 +8,6 @@ import (
 	"github.com/36625090/turbo/logical"
 	"github.com/36625090/turbo/option"
 	"github.com/36625090/turbo/server"
-	"github.com/36625090/turbo/transport"
 	"github.com/36625090/turbo/utils"
 	"github.com/go-various/consul"
 	"github.com/hashicorp/go-hclog"
@@ -21,23 +20,18 @@ import (
 )
 
 type Turbo interface {
+
 	//Initialize 服务初始化
-	Initialize() error
+	Initialize(func(*server.TurboContext)) error
 
-	//AddHandle 添加http方法
-	AddHandle(path string, method logical.HttpMethod, handle func(*transport.Context, *server.HandlerParams) error)
+	//InitializeBackend 注册后端逻辑端点
+	InitializeBackend(string, logical.Factory, *logical.BackendContext) error
 
-	//RegisterBackend 注册后端逻辑端点
-	RegisterBackend(string, logical.Factory, *logical.BackendContext) error
+	//InitializeAuthorization 注册验证接口，如未注册则不验证
+	InitializeAuthorization(authorization authorities.Authorization) error
 
-	//RegisterAuthorization 注册验证接口，如微注册则不验证
-	RegisterAuthorization(authorization authorities.Authorization) error
-
-	//Start 启动服务
 	Start() error
 	Stop()
-	//AddLoggerSinks register sinks
-	AddLoggerSinks(sinks ...hclog.SinkAdapter)
 }
 
 //Default default
@@ -87,20 +81,16 @@ func Default(opts *option.Options, factories map[string]logical.Factory) (Turbo,
 	}
 
 	inv := server.NewServer(opts, globalConfig, client, logger)
-	if err := inv.RegisterAuthorization(authorization); err != nil {
+
+	if err := inv.InitializeAuthorization(authorization); err != nil {
 		return nil, err
 	}
 
 	for name, factory := range factories {
-		if err := inv.RegisterBackend(name, factory, context); err != nil {
+		if err := inv.InitializeBackend(name, factory, context); err != nil {
 			return nil, err
 		}
 	}
-
-	if err := inv.Initialize(); err != nil {
-		return nil, err
-	}
-
 	return inv, nil
 }
 
