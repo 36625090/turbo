@@ -19,7 +19,6 @@ const (
 
 type Claims struct {
 	jwt.RegisteredClaims
-	AccountRoles []string
 	Principal    []byte
 }
 
@@ -80,7 +79,6 @@ func (m *jwtTokenHandler) GenerateToken(auth *Authorized) (string, error) {
 	claims.ID = auth.ID
 	claims.Audience = jwt.ClaimStrings{auth.Account}
 	claims.Issuer = TokenIssuer
-	claims.AccountRoles = auth.AccountRoles
 	claims.Principal = enc
 
 	if m.settings.Timeout > 0 {
@@ -143,7 +141,6 @@ func (m *jwtTokenHandler) ParseToken(token string) (*Authorized, error) {
 
 	authorized := &Authorized{
 		ID:           claims.ID,
-		AccountRoles: claims.AccountRoles,
 		Principal:    principal,
 	}
 	if len(claims.Audience) > 0 {
