@@ -22,7 +22,6 @@ import (
 
 type Server struct {
 	sync.Mutex
-
 	ctx           context.Context
 	logger        hclog.InterceptLogger
 	opts          *option.Options
