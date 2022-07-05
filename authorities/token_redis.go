@@ -11,8 +11,8 @@ type redisTokenHandler struct {
 	redis    redisplus.RedisCli
 }
 
-func NewRedisTokenHandler(settings *Settings, config *redisplus.Config) (TokenHandler, error) {
-	view, err := redisplus.NewRedisCli(config, config.KeyPrefix)
+func NewRedisTokenHandler(app string, settings *Settings, config *redisplus.Config) (TokenHandler, error) {
+	view, err := redisplus.NewRedisCli(config, app)
 	if err != nil {
 		return nil, err
 	}

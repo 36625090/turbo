@@ -118,12 +118,12 @@ func initCentralConfig(client consul.Client, globalConfig *config.GlobalConfig) 
 	return client.LoadConfig(globalConfig)
 }
 
-func initializeAuthorization(globalConfig *config.GlobalConfig, err error) (authorities.Authorization, error) {
+func initializeAuthorization(app string,globalConfig *config.GlobalConfig, err error) (authorities.Authorization, error) {
 	var tokenHandler authorities.TokenHandler
 	if globalConfig.Authorization.AuthType == authorities.AuthTypeJwt || globalConfig.Authorization.AuthType == "" {
-		tokenHandler, err = authorities.NewJwtTokenHandler(globalConfig.Authorization)
+		tokenHandler, err = authorities.NewJwtTokenHandler(app, globalConfig.Authorization)
 	} else {
-		tokenHandler, err = authorities.NewRedisTokenHandler(globalConfig.Authorization, globalConfig.RedisConfig)
+		tokenHandler, err = authorities.NewRedisTokenHandler(app, globalConfig.Authorization, globalConfig.RedisConfig)
 	}
 	if err != nil {
 		return nil, err

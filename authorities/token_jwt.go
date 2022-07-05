@@ -13,10 +13,6 @@ import (
 	"time"
 )
 
-const (
-	TokenIssuer = "Do-not-involution@36625090"
-)
-
 type Claims struct {
 	jwt.RegisteredClaims
 	Principal    []byte
@@ -26,10 +22,12 @@ type jwtTokenHandler struct {
 	pri      *rsa.PrivateKey
 	pub      *rsa.PublicKey
 	settings *Settings
+	app string
 }
 
-func NewJwtTokenHandler(settings *Settings) (TokenHandler, error) {
+func NewJwtTokenHandler(app string, settings *Settings) (TokenHandler, error) {
 	h := &jwtTokenHandler{
+		app: app,
 		pri:      nil,
 		pub:      nil,
 		settings: settings,
@@ -78,7 +76,7 @@ func (m *jwtTokenHandler) GenerateToken(auth *Authorized) (string, error) {
 	claims := Claims{}
 	claims.ID = auth.ID
 	claims.Audience = jwt.ClaimStrings{auth.Account}
-	claims.Issuer = TokenIssuer
+	claims.Issuer = m.app
 	claims.Principal = enc
 
 	if m.settings.Timeout > 0 {
