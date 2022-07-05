@@ -47,6 +47,7 @@ func (l *rotatedLogging) start() {
 		select {
 		case <-timer.C:
 			resettable.ResetOutputWithFlush(l.opts, l)
+			time.Sleep(time.Second * 5)
 			l.logger.Info("rotated logging", "next", time.Now().Add(l.nextRoundOfMilliDuration()).Format(time.RFC3339))
 			timer.Reset(l.nextRoundOfMilliDuration())
 		case <-l.sigChan:

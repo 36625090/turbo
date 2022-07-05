@@ -22,14 +22,14 @@ func NewAuthorization(settings *Settings, handler TokenHandler) (Authorization, 
 	return a, nil
 }
 
-func (j *TokenAuthorization) Authentication(ctx context.Context, token string) (*Authorized, error) {
-	authorized, err := j.tokenHandler.ParseToken(token)
+func (m *TokenAuthorization) Authentication(ctx context.Context, token string) (*Authorized, error) {
+	authorized, err := m.tokenHandler.ParseToken(token)
 	if err != nil {
 		return nil, fmt.Errorf("parse token: %v", err)
 	}
 
 	return authorized, nil
 }
-func (j *TokenAuthorization) TokenHandler() TokenHandler {
-	return j.tokenHandler
+func (m *TokenAuthorization) TokenHandler() TokenHandler {
+	return m.tokenHandler
 }

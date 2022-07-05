@@ -1,5 +1,5 @@
+//go:generate go run  main.go --app example --config config.hcl --log.level trace  --log.console --log.path logs  --http.path=/example --ui  --http.port 8081
 package main
-
 import (
 	"github.com/36625090/turbo"
 	_ "github.com/36625090/turbo"
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	inv.Initialize(func(ctx *server.TurboContext) {
-
+		//do something
 	})
 
 	if err := inv.Start(); err != nil {

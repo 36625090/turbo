@@ -1,7 +1,6 @@
 package turbo
 
 import (
-	"errors"
 	"github.com/36625090/turbo/authorities"
 	"github.com/36625090/turbo/config"
 	"github.com/36625090/turbo/logging"
@@ -27,7 +26,7 @@ type Turbo interface {
 	//InitializeBackend 注册后端逻辑端点
 	InitializeBackend(string, logical.Factory, *logical.BackendContext) error
 
-	//InitializeAuthorization 注册验证接口，如未注册则不验证
+	//InitializeAuthorization 注册自定义验证接口
 	InitializeAuthorization(authorization authorities.Authorization) error
 
 	Start() error
@@ -119,20 +118,34 @@ func initCentralConfig(client consul.Client, globalConfig *config.GlobalConfig) 
 	return client.LoadConfig(globalConfig)
 }
 
+//initializeAuthorization 初始化验证模块
 func initializeAuthorization(app string, globalConfig *config.GlobalConfig, err error) (authorities.Authorization, error) {
 	var tokenHandler authorities.TokenHandler
-	if globalConfig.Authorization.AuthType == authorities.AuthTypeJwt || globalConfig.Authorization.AuthType == "" {
-		tokenHandler, err = authorities.NewJwtTokenHandler(app, globalConfig.Authorization)
-	} else {
-		tokenHandler, err = authorities.NewRedisTokenHandler(app, globalConfig.Authorization, globalConfig.RedisConfig)
-	}
-	if err != nil {
-		return nil, err
+
+	if globalConfig.Authorization == nil {
+		tokenHandler, _ = authorities.NewNoopTokenHandler()
+		return authorities.NewAuthorization(&authorities.Settings{}, tokenHandler)
 	}
 
-	authorization, err := authorities.NewAuthorization(globalConfig.Authorization, tokenHandler)
-	if err != nil {
-		return nil, errors.New("initialization authorization: " + err.Error())
+	switch globalConfig.Authorization.AuthType {
+
+	case authorities.AuthTypeJwt:
+		tokenHandler, err = authorities.NewJwtTokenHandler(app, globalConfig.Authorization)
+		if err != nil {
+			return nil, err
+		}
+		return authorities.NewAuthorization(globalConfig.Authorization, tokenHandler)
+
+	case authorities.AuthTypeRedis:
+		tokenHandler, err = authorities.NewRedisTokenHandler(app, globalConfig.Authorization, globalConfig.RedisConfig)
+		if err != nil {
+			return nil, err
+		}
+		return authorities.NewAuthorization(globalConfig.Authorization, tokenHandler)
+
+	default:
+		tokenHandler, _ = authorities.NewNoopTokenHandler()
+		return authorities.NewAuthorization(&authorities.Settings{}, tokenHandler)
 	}
-	return authorization, nil
+
 }

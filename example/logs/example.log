@@ -1,0 +1,28 @@
+2022-07-05T17:00:22.197+0800 [INFO]  logging/logging.go:45: rotate logging: next="2022-07-06T00:00:00+08:00"
+2022-07-05T17:00:22.199+0800 [INFO]  server/server_backend.go:34: register backend: name=account
+2022-07-05T17:00:22.199+0800 [INFO]  transport/transport.go:47: transport: initialize handle: path=/example/api method=POST
+2022-07-05T17:00:22.199+0800 [INFO]  server/server_document.go:39: initialize handle: path=/example/docs
+2022-07-05T17:00:22.199+0800 [INFO]  server/server.go:69: start starting
+2022-07-05T17:00:22.199+0800 [INFO]  server/server.go:71: server listening on : address=0.0.0.0:8081
+2022-07-05T17:00:22.199+0800 [INFO]  server/server.go:98: server start completed
+2022-07-05T17:01:16.756+0800 [INFO]  logging/logging.go:45: rotate logging: next="2022-07-06T00:00:00+08:00"
+2022-07-05T17:01:16.757+0800 [INFO]  server/server_backend.go:34: register backend: name=account
+2022-07-05T17:01:16.757+0800 [INFO]  transport/transport.go:47: transport: initialize handle: path=/example/api method=POST
+2022-07-05T17:01:16.757+0800 [INFO]  server/server_document.go:39: initialize handle: path=/example/docs
+2022-07-05T17:01:16.757+0800 [INFO]  server/server.go:69: start starting
+2022-07-05T17:01:16.757+0800 [INFO]  server/server.go:71: server listening on : address=0.0.0.0:8081
+2022-07-05T17:01:32.201+0800 [INFO]  logging/logging.go:45: rotate logging: next="2022-07-06T00:00:00+08:00"
+2022-07-05T17:01:32.203+0800 [INFO]  server/server_backend.go:34: register backend: name=account
+2022-07-05T17:01:32.203+0800 [INFO]  transport/transport.go:47: transport: initialize handle: path=/example/api method=POST
+2022-07-05T17:01:32.203+0800 [INFO]  server/server_document.go:39: initialize handle: path=/example/docs
+2022-07-05T17:01:32.203+0800 [INFO]  server/server.go:69: start starting
+2022-07-05T17:01:32.203+0800 [INFO]  server/server.go:71: server listening on : address=0.0.0.0:8081
+2022-07-05T17:01:32.204+0800 [INFO]  server/server.go:98: server start completed
+2022-07-05T17:07:30.474+0800 [INFO]  server/server.go:105: Server shutting
+2022-07-05T17:07:33.248+0800 [INFO]  logging/logging.go:45: rotate logging: next="2022-07-06T00:00:00+08:00"
+2022-07-05T17:07:33.248+0800 [INFO]  server/server_backend.go:34: register backend: name=account
+2022-07-05T17:07:33.248+0800 [INFO]  transport/transport.go:47: transport: initialize handle: path=/example/api method=POST
+2022-07-05T17:07:33.248+0800 [INFO]  server/server_document.go:39: initialize handle: path=/example/docs
+2022-07-05T17:07:33.249+0800 [INFO]  server/server.go:69: start starting
+2022-07-05T17:07:33.249+0800 [INFO]  server/server.go:71: server listening on : address=0.0.0.0:8081
+2022-07-05T17:07:33.249+0800 [INFO]  server/server.go:98: server start completed

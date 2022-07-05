@@ -1,18 +1,6 @@
 package server
 
 func (m *Server) Initialize(handle func(*TurboContext)) error {
-	m.httpTransport.Use(m.requestTracer())
-
-	if m.opts.Newrelic {
-		m.httpTransport.Use(m.newrelicTracer())
-	}
-	m.initBackendAPIServer()
-
-	if m.opts.Ui {
-		m.addDocumentSchema()
-		m.addDocumentUI()
-	}
-
 	params := &TurboContext{
 		Options:   m.opts,
 		Context:   m.ctx,
@@ -24,6 +12,18 @@ func (m *Server) Initialize(handle func(*TurboContext)) error {
 	}
 	if handle != nil {
 		handle(params)
+	}
+
+	m.httpTransport.Use(m.requestTracer())
+
+	if m.opts.Newrelic {
+		m.httpTransport.Use(m.newrelicTracer())
+	}
+	m.initBackendAPIServer()
+
+	if m.opts.Ui {
+		m.addDocumentSchema()
+		m.addDocumentUI()
 	}
 	return nil
 }
