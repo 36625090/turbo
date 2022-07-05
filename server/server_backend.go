@@ -74,7 +74,7 @@ func (m *Server) initBackendAPIServer() {
 		args.Authorized = authorized
 		resp, werr := backend.HandleRequest(context.Background(), args)
 		if werr != nil {
-			ctx.WithCode(werr.Code).WithMessage(werr.String())
+			ctx.WithCode(werr.Code).WithMessage(werr.Err.Error())
 			return werr.Error()
 		}
 		if resp.Code != 0 {
