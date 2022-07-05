@@ -106,8 +106,8 @@ github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LB
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-various/consul v1.0.3 h1:CVlTDwIPJu3hYRGAiG6srLIgoYl3MJyy4wSY8lnNNn0=
 github.com/go-various/consul v1.0.3/go.mod h1:+jz2lDXIhPVi+CxB1Vp7SmQi0sxawvYSZ7CNvVqMCTs=
-github.com/go-various/micro v1.0.1 h1:KgJt5OFUH7jZVbn/mt828AYXqhaaj6QvYrSZHO8taYo=
-github.com/go-various/micro v1.0.1/go.mod h1:Hlxg3PWoIwIX4D9WGKZ6fknoEMU6rqzrQ8qBhAMZVUI=
+github.com/go-various/micro v1.0.2 h1:jt02tnj6UzbZNglsYfPFORj9wccMhCzVpcAa0GSuzPY=
+github.com/go-various/micro v1.0.2/go.mod h1:Hlxg3PWoIwIX4D9WGKZ6fknoEMU6rqzrQ8qBhAMZVUI=
 github.com/go-various/redisplus v1.0.4 h1:JDGZ1avQ7UK88x2/mjNh8t1oyentb4zUvto77D+hBjU=
 github.com/go-various/redisplus v1.0.4/go.mod h1:KRgtQRktsIlhNM4iZ+g3frFUOeuhf6YjrrauX3lTMug=
 github.com/go-various/xorm v0.0.0-20220126094347-50de33934412 h1:LLzJFEduvHpBGM+1RDJIE2DGi1Z3yJQ0VjrAhxbvaT0=

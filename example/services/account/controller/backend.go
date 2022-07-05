@@ -22,8 +22,8 @@ func Factory(ctx context.Context, name string, conf *logical.BackendContext) (lo
 	)
 
 	b.InitializeFunc = func(ctx context.Context) error {
-		if b.LBAdapter != nil {
-			b.LBAdapter.AddHooks(&microHook{Logger: b.Logger})
+		if b.ClientAdapter != nil {
+			b.ClientAdapter.AddHooks(&microHook{Logger: b.Logger})
 		}
 		return nil
 	}

@@ -9,7 +9,7 @@ import (
 
 func (b *backend) userLogout(ctx context.Context, args *logical.Args, reply *logical.Reply) *logical.WrapperError {
 
-	cli, err := b.LBAdapter.Client("userservice", "").RestyClient()
+	cli, err := b.ClientAdapter.Client("userservice", "").RestyClient()
 	if err != nil {
 		return &logical.WrapperError{
 			Code: codes.CodeServiceException,

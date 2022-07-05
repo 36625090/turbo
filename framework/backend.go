@@ -27,22 +27,22 @@ var _ logical.Backend = (*Backend)(nil)
 
 // Backend 后端主逻辑框架实现
 type Backend struct {
+	once                    sync.Once
+	documents               logical.Documents
+	validator               *validator.Validate
 	Name                    string
 	Description             string
 	Logger                  log.Logger
 	Config                  *logical.BackendContext
-	once                    sync.Once
-	documents               logical.Documents
 	Endpoints               []*Endpoint
-	ConsulClient            consul.Client
+	Consul                  consul.Client
 	XormPlus                xorm.EngineInterface
 	RedisCli                redisplus.RedisCli
-	LBAdapter               micro.LBAdapter
+	ClientAdapter           micro.ClientAdapter
 	TokenHandler            authorities.TokenHandler
 	Clean                   CleanupFunc
 	InitializeFunc          InitializeFunc
 	HandleRequestBeforeFunc HandleRequestBeforeFunc
-	validator               *validator.Validate
 }
 
 func (b *Backend) BackendName() string {
@@ -175,8 +175,8 @@ func (b *Backend) Initialize(ctx context.Context) (err error) {
 
 	//初始化微服务客户端
 	if b.Config.Consul != nil {
-		b.ConsulClient = b.Config.Consul
-		b.LBAdapter = micro.RandomLBClient(logical.NewMicroServiceClient(b.ConsulClient))
+		b.Consul = b.Config.Consul
+		b.ClientAdapter = micro.RandomAdapter(logical.NewMicroServiceClient(b.Consul))
 	}
 
 	//初始化验证接口

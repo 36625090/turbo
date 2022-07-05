@@ -14,7 +14,6 @@ func (b *backend) userLogin(ctx context.Context, args *logical.Args, reply *logi
 	authorized := &authorities.Authorized{
 		ID:           "1",
 		Account:      "example-account",
-		AccountRoles: []string{"member"},
 		Principal: map[string]interface{}{
 			"mobile": "13800000000",
 		},
