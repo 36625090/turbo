@@ -55,7 +55,7 @@ func Default(opts *option.Options, factories map[string]logical.Factory) (Turbo,
 
 	logger.Trace("initialize config", "config", utils.JSONPrettyDump(globalConfig))
 
-	authorization, err := initializeAuthorization(globalConfig, err)
+	authorization, err := initializeAuthorization(opts.App, globalConfig, err)
 	if err != nil {
 		return nil, err
 	}
