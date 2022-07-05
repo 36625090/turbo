@@ -60,15 +60,6 @@ func Default(opts *option.Options, factories map[string]logical.Factory) (Turbo,
 		return nil, err
 	}
 
-	context := &logical.BackendContext{
-		Logger:       logger,
-		Application:  opts.App,
-		XormConfig:   globalConfig.XormConfig,
-		RedisConfig:  globalConfig.RedisConfig,
-		AuthSettings: globalConfig.Authorization,
-		TokenHandler: authorization.TokenHandler(),
-	}
-
 	var client consul.Client
 	if opts.UseConsul {
 		client, err = initializeConsul(opts, logger)
@@ -84,6 +75,16 @@ func Default(opts *option.Options, factories map[string]logical.Factory) (Turbo,
 
 	if err := inv.InitializeAuthorization(authorization); err != nil {
 		return nil, err
+	}
+
+	context := &logical.BackendContext{
+		Logger:       logger,
+		Application:  opts.App,
+		XormConfig:   globalConfig.XormConfig,
+		RedisConfig:  globalConfig.RedisConfig,
+		AuthSettings: globalConfig.Authorization,
+		TokenHandler: authorization.TokenHandler(),
+		Consul:       client,
 	}
 
 	for name, factory := range factories {
@@ -118,7 +119,7 @@ func initCentralConfig(client consul.Client, globalConfig *config.GlobalConfig) 
 	return client.LoadConfig(globalConfig)
 }
 
-func initializeAuthorization(app string,globalConfig *config.GlobalConfig, err error) (authorities.Authorization, error) {
+func initializeAuthorization(app string, globalConfig *config.GlobalConfig, err error) (authorities.Authorization, error) {
 	var tokenHandler authorities.TokenHandler
 	if globalConfig.Authorization.AuthType == authorities.AuthTypeJwt || globalConfig.Authorization.AuthType == "" {
 		tokenHandler, err = authorities.NewJwtTokenHandler(app, globalConfig.Authorization)
