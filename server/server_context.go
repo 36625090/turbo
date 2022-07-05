@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/36625090/turbo/config"
 	"github.com/36625090/turbo/logical"
+	"github.com/36625090/turbo/option"
 	"github.com/36625090/turbo/transport"
 	"github.com/gin-gonic/gin"
 	"github.com/go-various/consul"
@@ -15,6 +16,7 @@ import (
 
 
 type TurboContext struct {
+	Options  *option.Options
 	Context  context.Context
 	Backends map[string]logical.Backend
 	Config   *config.GlobalConfig

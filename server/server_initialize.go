@@ -3,7 +3,7 @@ package server
 func (m *Server) Initialize(handle func(*TurboContext)) error {
 	m.httpTransport.Use(m.requestTracer())
 
-	if m.opts.Newrelic{
+	if m.opts.Newrelic {
 		m.httpTransport.Use(m.newrelicTracer())
 	}
 	m.initBackendAPIServer()
@@ -14,6 +14,7 @@ func (m *Server) Initialize(handle func(*TurboContext)) error {
 	}
 
 	params := &TurboContext{
+		Options:   m.opts,
 		Context:   m.ctx,
 		Backends:  m.backends,
 		Config:    m.globalConfig,

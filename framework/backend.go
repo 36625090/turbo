@@ -71,6 +71,15 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 	}
 	resp = &logical.Reply{}
 	defer func() {
+		if err2 := recover(); nil != err2 {
+			b.Logger.Error("recover panic", "err", err2, "stack", string(debug.Stack()))
+			err = &logical.WrapperError{
+				Code:  codes.CodeServerInternalError,
+				Scope: "",
+				Err:   err2.(error),
+			}
+		}
+
 		if b.Logger.IsTrace() {
 			b.Logger.Trace("handle request after", "response", utils.JSONDump(resp))
 		}
@@ -80,14 +89,6 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 				"backend", b.Config.Application, "endpoint",
 				req.Endpoint, "operation", req.Operation,
 				"error", err)
-		}
-		if err2 := recover(); nil != err2 {
-			b.Logger.Error("recover panic", "err", err2, "stack", string(debug.Stack()))
-			err = &logical.WrapperError{
-				Code:  codes.CodeServerInternalError,
-				Scope: "",
-				Err:   err2.(error),
-			}
 		}
 	}()
 
