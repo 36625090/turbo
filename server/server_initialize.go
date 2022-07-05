@@ -1,5 +1,10 @@
 package server
 
+import (
+	"github.com/36625090/turbo/authorities"
+	"github.com/36625090/turbo/transport"
+)
+
 func (m *Server) Initialize(handle func(*TurboContext)) error {
 	params := &TurboContext{
 		Options:   m.opts,
@@ -26,4 +31,15 @@ func (m *Server) Initialize(handle func(*TurboContext)) error {
 		m.addDocumentUI()
 	}
 	return nil
+}
+
+//InitializeAuthorization 注册验证代理接口，如不需要课不注册
+func (m *Server) InitializeAuthorization(authorization authorities.Authorization) error {
+	m.authorization = authorization
+	return nil
+}
+
+//InitializeSigner 注册加签验签
+func (m *Server) InitializeSigner(signer transport.Signer){
+	m.httpTransport.SetSigner(signer)
 }

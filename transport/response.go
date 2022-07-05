@@ -44,3 +44,8 @@ func (r *Response) Map() map[string]interface{} {
 	}
 	return params
 }
+
+type WrapperResponse struct {
+	Code int
+	Date interface{}
+}

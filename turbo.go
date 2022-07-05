@@ -7,6 +7,7 @@ import (
 	"github.com/36625090/turbo/logical"
 	"github.com/36625090/turbo/option"
 	"github.com/36625090/turbo/server"
+	"github.com/36625090/turbo/transport"
 	"github.com/36625090/turbo/utils"
 	"github.com/go-various/consul"
 	"github.com/hashicorp/go-hclog"
@@ -27,7 +28,10 @@ type Turbo interface {
 	InitializeBackend(string, logical.Factory, *logical.BackendContext) error
 
 	//InitializeAuthorization 注册自定义验证接口
-	InitializeAuthorization(authorization authorities.Authorization) error
+	InitializeAuthorization(authorities.Authorization) error
+
+	//InitializeSigner 注册自定义加签验签
+	InitializeSigner(transport.Signer)
 
 	Start() error
 	Stop()

@@ -19,7 +19,7 @@ type Transport struct {
 	pool   sync.Pool
 }
 
-type Handle func(c *Context) error
+type Handle func(c *Context)
 
 func NewTransport(en *gin.Engine, settings *Settings, logger hclog.Logger) *Transport {
 	transport := &Transport{
@@ -71,7 +71,7 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 		if err := m.signer.Verify(ctx.GetClientID(), ctx.request.Sign, ctx.request); err != nil {
 			m.logger.Error("verify request sign error",
 				"path", ctx.RawRequest().RequestURI,
-				"client-id", ctx.GetClientID(),
+				"client", ctx.GetClientID(),
 				"sign", ctx.request.Sign,
 				"err", err)
 			ctx.WithCode(codes.CodeInvalidSignature).
@@ -79,14 +79,7 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 			return
 		}
 
-		err := handle(ctx)
-		if nil != err {
-			m.logger.Error("handle request error",
-				"path", ctx.RawRequest().RequestURI, "err", err)
-			ctx.write()
-			return
-		}
-
+		handle(ctx)
 		sign, err := m.signer.Sign(GlobalSignKey, ctx.response)
 		if err != nil {
 			ctx.WithCode(codes.CodeInvalidSignature).WithMessage(err.Error()).write()
@@ -101,4 +94,8 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 
 func (m *Transport) Router() gin.IRouter {
 	return m.Engine
+}
+
+func (m *Transport) SetSigner(signer Signer){
+	m.signer = signer
 }

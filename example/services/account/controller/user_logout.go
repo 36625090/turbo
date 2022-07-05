@@ -8,7 +8,15 @@ import (
 )
 
 func (b *backend) userLogout(ctx context.Context, args *logical.Args, reply *logical.Reply) *logical.WrapperError {
-
+	if b.ClientAdapter == nil{
+		reply.Code = codes.CodeServiceException.Int()
+		reply.Message = "client adapter is nil"
+		return nil
+		//return &logical.WrapperError{
+		//	Code: codes.CodeServiceException,
+		//	Err:  errors.New("client adapter is nil"),
+		//}
+	}
 	cli, err := b.ClientAdapter.Client("userservice", "").RestyClient()
 	if err != nil {
 		return &logical.WrapperError{

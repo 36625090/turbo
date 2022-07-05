@@ -7,6 +7,8 @@ import (
 	"github.com/36625090/turbo/logical"
 	"github.com/36625090/turbo/option"
 	"github.com/36625090/turbo/server"
+	"github.com/36625090/turbo/transport"
+	"github.com/hashicorp/go-hclog"
 	"log"
 	"os"
 )
@@ -36,6 +38,7 @@ func main() {
 
 	inv.Initialize(func(ctx *server.TurboContext) {
 		//do something
+		inv.InitializeSigner(&signer{ctx.Logger})
 	})
 
 	if err := inv.Start(); err != nil {
@@ -43,4 +46,18 @@ func main() {
 		return
 	}
 
+}
+
+type signer struct {
+	hclog.Logger
+}
+
+func (s signer) Sign(keyId string, resp transport.Codec) (string, error) {
+	s.Info("signing", "id", keyId, "resp", resp)
+	return "11111111111111111111", nil
+}
+
+func (s signer) Verify(keyId, sign string, req transport.Codec) error {
+	s.Info("signing", "id", keyId, "sign",sign,"req", req)
+	return nil
 }

@@ -83,11 +83,6 @@ func (c *Context) WithCode(code codes.ReturnCode) *Context {
 	return c
 }
 
-func (c *Context) WithError(err error) *Context {
-	c.response.Message = err.Error()
-	return c
-}
-
 func (c *Context) WithMessage(message string) *Context {
 	c.response.Message = message
 	return c

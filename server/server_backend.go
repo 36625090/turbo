@@ -42,9 +42,10 @@ func (m *Server) initBackendAPIServer() {
 		m.httpTransport.Use(m.loggerTracker(path))
 	}
 
-	m.httpTransport.AddHandle(path, logical.HttpMethodPOST, func(ctx *transport.Context) (err error) {
+	m.httpTransport.AddHandle(path, logical.HttpMethodPOST, func(ctx *transport.Context){
 		request := ctx.Request()
 		m.connection.Inc()
+		var err error
 		defer func() {
 			m.connection.Dec()
 			if err != nil {
@@ -56,34 +57,34 @@ func (m *Server) initBackendAPIServer() {
 
 		if !ok {
 			ctx.WithCode(codes.CodeBackendIssue).WithMessage("invalid backend")
-			return errors.New("invalid backend")
+			return
 		}
 
 		authorized, err := m.preAuthorization(request.Method, ctx.GetAuthToken())
 		if err != nil {
-			ctx.WithCode(codes.CodeUnauthorized).WithError(err)
-			return err
+			ctx.WithCode(codes.CodeUnauthorized).WithMessage(err.Error())
+			return
 		}
 
 		args, err := ctx.DecodeArgs()
 		if err != nil {
-			ctx.WithCode(codes.CodeFailedDecodeArgs).WithError(err)
-			return err
+			ctx.WithCode(codes.CodeFailedDecodeArgs).WithMessage(err.Error())
+			return
 		}
 
 		args.Authorized = authorized
 		resp, werr := backend.HandleRequest(context.Background(), args)
 		if werr != nil {
 			ctx.WithCode(werr.Code).WithMessage(werr.Err.Error())
-			return werr.Error()
+			return
 		}
+
 		if resp.Code != 0 {
 			ctx.WithCode(codes.ReturnCode(resp.Code)).WithMessage(resp.Message)
-			return nil
+			return
 		}
 		ctx.WithContent(resp.Data)
 		ctx.WithPagination(resp.Pagination)
-		return nil
 	})
 
 }

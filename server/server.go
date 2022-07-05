@@ -57,12 +57,6 @@ func NewServer(opts *option.Options, cfg *config.GlobalConfig, cl consul.Client,
 	}
 }
 
-//InitializeAuthorization 注册验证代理接口，如不需要课不注册
-func (m *Server) InitializeAuthorization(authorization authorities.Authorization) error {
-	m.authorization = authorization
-	return nil
-}
-
 //Start the Server
 //启动服务
 func (m *Server) Start() error {
