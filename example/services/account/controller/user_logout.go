@@ -19,10 +19,9 @@ func (b *backend) userLogout(ctx context.Context, args *logical.Args, reply *log
 	}
 	cli, err := b.ClientAdapter.Client("userservice", "").RestyClient()
 	if err != nil {
-		return &logical.WrapperError{
-			Code: codes.CodeServiceException,
-			Err:  err,
-		}
+		return logical.NewWrapperError().
+			WithCode(codes.CodeServiceException).
+			WithErr(err)
 	}
 
 	var body = map[string]interface{}{
@@ -36,10 +35,9 @@ func (b *backend) userLogout(ctx context.Context, args *logical.Args, reply *log
 		SetHeader("Biz-ProductId", "22222").
 		Post("/users/loginByMobilePhone")
 	if nil != err {
-		return &logical.WrapperError{
-			Code: codes.CodeServiceException,
-			Err:  err,
-		}
+		return logical.NewWrapperError().
+			WithCode(codes.CodeServiceException).
+			WithErr(err)
 	}
 
 	var body2 map[string]interface{}

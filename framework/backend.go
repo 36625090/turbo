@@ -73,11 +73,9 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 	defer func() {
 		if rec := recover(); nil != rec {
 			b.Logger.Error("recover panic", "err", rec, "stack", string(debug.Stack()))
-			err = &logical.WrapperError{
-				Code:  codes.CodeServerInternalError,
-				Scope: "",
-				Err:   rec.(error),
-			}
+			err = logical.NewWrapperError().
+				WithCode(codes.CodeServerInternalError).
+				WithErr(rec.(error))
 		}
 
 		if b.Logger.IsTrace() {
@@ -94,46 +92,36 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 	}()
 
 	if err := b.Validate(req); err != nil {
-		return nil, &logical.WrapperError{
-			Code:  codes.CodeDataValidateException,
-			Scope: "",
-			Err:   err,
-		}
+		return nil, logical.NewWrapperError().
+			WithCode(codes.CodeDataValidateException).
+			WithErr(err)
 	}
 
 	if req.GetTraceID() == "" {
-		return nil, &logical.WrapperError{
-			Code:  codes.CodeRequestHeaderMissing,
-			Scope: "",
-			Err:   errors.New("trace ID is required"),
-		}
+		return nil, logical.NewWrapperError().
+			WithCode(codes.CodeRequestHeaderMissing).
+			WithErr(errors.New("trace ID is required"))
 	}
 	// Find the matching route
 	path := b.find(req.Endpoint)
 	if nil == path {
-		return nil, &logical.WrapperError{
-			Code:  codes.CodeEndpointNotFound,
-			Scope: "",
-			Err:   ErrEndpointNotExists,
-		}
+		return nil, logical.NewWrapperError().
+			WithCode(codes.CodeEndpointNotFound).
+			WithErr(ErrEndpointNotExists)
 	}
 
 	operation, ok := path.Operations[req.Operation]
 	if !ok {
-		return nil, &logical.WrapperError{
-			Code:  codes.CodeOperationNotFound,
-			Scope: "",
-			Err:   ErrOperationNotExists,
-		}
+		return nil, logical.NewWrapperError().
+			WithCode(codes.CodeOperationNotFound).
+			WithErr(ErrOperationNotExists)
 	}
 
 	if operation.Handler() == nil {
-		return nil, &logical.WrapperError{
-			Code:  codes.CodeOperationHandlerIssue,
-			Scope: "",
-			Err: fmt.Errorf("operation headler: %s.%s.%s cannot be nil",
-				req.Backend, req.Endpoint, req.Operation),
-		}
+		return nil, logical.NewWrapperError().
+			WithCode(codes.CodeOperationHandlerIssue).
+			WithErr(fmt.Errorf("operation headler: %s.%s.%s cannot be nil",
+			req.Backend, req.Endpoint, req.Operation))
 	}
 
 	if b.HandleRequestBeforeFunc != nil {

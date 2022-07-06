@@ -14,6 +14,13 @@ type Authorized struct {
 
 type Principal map[string]interface{}
 
+func (m Principal) Get(key string)interface{}  {
+	if nil == m{
+		return nil
+	}
+	return m[key]
+}
+
 func NewAuthorized(id, account string, principal Principal) Authorized {
 	return Authorized{ID: id, Account: account, Principal: principal}
 }
