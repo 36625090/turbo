@@ -7,18 +7,12 @@ import (
 func TestMd5Signer_Sign(t *testing.T) {
 
 	settings := Settings{
-		Transport: struct {
-			SignType      string            `json:"sign_type" hcl:"sign_type" default:"md5"`
-			SignKeys      map[string]string `json:"sign_keys" hcl:"sign_keys"`
-			DefaultPolicy SignPolicy        `json:"default_policy" hcl:"default_policy"`
-		}{
-			SignType: "md5",
-			SignKeys: map[string]string{
-				"default": "a1ede45dbcbbf7d9dc64def29f95beda",
-				"user1":   "d41d8cd98f00b204e9800998ecf8427e",
-			},
-			DefaultPolicy: SignPolicyDeny,
+		SignType: "md5",
+		SignKeys: map[string]string{
+			"global": "a1ede45dbcbbf7d9dc64def29f95beda",
+			"user1":   "d41d8cd98f00b204e9800998ecf8427e",
 		},
+		DefaultPolicy: SignPolicyDeny,
 	}
 
 	signer := &signer{}

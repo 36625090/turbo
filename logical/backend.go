@@ -12,13 +12,13 @@ import (
 // BackendContext 主配置
 // 此处为了省事将 XormConfig RedisConfig  AuthSettings的设置放在了一个对象
 type BackendContext struct {
-	Logger       hclog.Logger
 	Application  string                   `json:"application" hcl:"application"`
 	XormConfig   *xorm.Config             `json:"xorm" hcl:"xorm,block"`
 	RedisConfig  *redisplus.Config        `json:"redis" hcl:"redis,block"`
 	AuthSettings *authorities.Settings    `json:"authorization" hcl:"authorization,block"`
 	Consul       consul.Client            `json:"-"`
 	TokenHandler authorities.TokenHandler `json:"-"`
+	Logger       hclog.Logger             `json:"-"`
 }
 
 func (m *BackendContext) Clone() *BackendContext {
