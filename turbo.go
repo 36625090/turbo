@@ -22,7 +22,7 @@ import (
 type Turbo interface {
 
 	//Initialize 服务初始化
-	Initialize(func(*server.TurboContext)) error
+	Initialize(func(*server.TurboContext) error) error
 
 	//InitializeBackend 注册后端逻辑端点
 	InitializeBackend(string, logical.Factory, *logical.BackendContext) error
@@ -95,6 +95,7 @@ func Default(opts *option.Options, factories map[string]logical.Factory) (Turbo,
 			return nil, err
 		}
 	}
+
 	return inv, nil
 }
 

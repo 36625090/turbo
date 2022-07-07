@@ -5,7 +5,7 @@ import (
 	"github.com/36625090/turbo/transport"
 )
 
-func (m *Server) Initialize(handle func(*TurboContext)) error {
+func (m *Server) Initialize(handle func(*TurboContext) error) error {
 	params := &TurboContext{
 		Options:   m.opts,
 		Context:   m.ctx,
@@ -16,7 +16,9 @@ func (m *Server) Initialize(handle func(*TurboContext)) error {
 		Transport: m.httpTransport,
 	}
 	if handle != nil {
-		handle(params)
+		if err := handle(params); err != nil {
+			return err
+		}
 	}
 
 	m.httpTransport.Use(m.requestTracer())
@@ -40,6 +42,6 @@ func (m *Server) InitializeAuthorization(authorization authorities.Authorization
 }
 
 //InitializeSigner 注册加签验签
-func (m *Server) InitializeSigner(signer transport.Signer){
+func (m *Server) InitializeSigner(signer transport.Signer) {
 	m.httpTransport.SetSigner(signer)
 }

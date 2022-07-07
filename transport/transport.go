@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/go-hclog"
 	"runtime/debug"
-	"sync"
-	"time"
 )
 
 //Transport 继承了gin实现的服务接口
@@ -16,28 +14,16 @@ type Transport struct {
 	*gin.Engine
 	logger hclog.Logger
 	signer Signer
-	pool   sync.Pool
 }
 
 type Handle func(c *Context)
 
-func NewTransport(en *gin.Engine, settings *Settings, logger hclog.Logger) *Transport {
+func NewTransport(en *gin.Engine, settings *Settings, logger hclog.InterceptLogger) *Transport {
 	transport := &Transport{
 		Engine: en,
-		logger: logger.Named("transport"),
-		signer: NewMD5Signer(settings),
+		logger: logger,
+		signer: NewMD5Signer(settings, logger),
 	}
-	transport.pool.New = func() interface{} {
-		ctx := new(Context)
-		ctx.request = new(Request)
-		ctx.response = &Response{
-			Message:   "",
-			Content:   nil,
-			Timestamp: time.Now().UnixMilli(),
-		}
-		return ctx
-	}
-
 	return transport
 }
 
@@ -51,7 +37,6 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 		ctx.response.TraceID = ctx.GetTraceID()
 
 		defer func() {
-			m.pool.Put(ctx)
 			if r := recover(); r != nil {
 				m.logger.Error("received panic", "err", r, "stack", string(debug.Stack()))
 				ctx.WithCode(codes.CodeHandleRequest).
@@ -85,7 +70,6 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 			ctx.WithCode(codes.CodeInvalidSignature).WithMessage(err.Error()).write()
 			return
 		}
-
 		ctx.WithSign(sign)
 		ctx.write()
 
@@ -96,6 +80,6 @@ func (m *Transport) Router() gin.IRouter {
 	return m.Engine
 }
 
-func (m *Transport) SetSigner(signer Signer){
+func (m *Transport) SetSigner(signer Signer) {
 	m.signer = signer
 }

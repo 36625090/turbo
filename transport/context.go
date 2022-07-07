@@ -24,6 +24,7 @@ func NewContext(ctx *gin.Context) *Context {
 			Message:   "",
 			Content:   nil,
 			Timestamp: time.Now().UnixMilli(),
+			Sign:      "00000000000000000000000000000000",
 		},
 	}
 	return context
