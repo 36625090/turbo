@@ -57,7 +57,10 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-require github.com/go-various/xorm v0.0.0-20220126094347-50de33934412
+require (
+	github.com/go-various/xorm v0.0.0-20220126094347-50de33934412
+	github.com/ryanuber/go-glob v1.0.0
+)
 
 require (
 	github.com/go-resty/resty/v2 v2.4.0 // indirect
