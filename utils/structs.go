@@ -5,37 +5,40 @@ import (
 	"reflect"
 )
 
-func StructToMap(obj interface{}) map[string]interface{} {
-	if nil == obj{
+func StructToMap(obj interface{}, useJsonTag bool) map[string]interface{} {
+	if nil == obj {
 		return nil
 	}
 
 	t := reflect.TypeOf(obj)
 	v := reflect.ValueOf(obj)
-	if t.Kind() == reflect.Ptr{
-		return StructToMap(v.Elem().Interface())
+	if t.Kind() == reflect.Ptr {
+		return StructToMap(v.Elem().Interface(), useJsonTag)
 	}
 
 	var data = make(map[string]interface{})
 	for i := 0; i < t.NumField(); i++ {
-		key :=  t.Field(i)
+		key := t.Field(i)
 		value := v.Field(i)
-		value = getValue( value )
+		value = getValue(value)
+		name := key.Name
+		if useJsonTag && key.Tag.Get("json") != "" {
+			name = key.Tag.Get("json")
+		}
 		switch value.Type().Kind() {
 		case reflect.Interface:
 			fallthrough
 		case reflect.Struct:
-			data[key.Name] = StructToMap( value.Interface() )
+			data[name] = StructToMap(value.Interface(), useJsonTag)
 		default:
-			data[key.Name] = value.Interface()
+			data[name] = value.Interface()
 		}
 	}
 	return data
 }
 
-
-func StructToJsonMap(obj interface{})map[string]interface{}{
-	if nil == obj{
+func StructToJsonMap(obj interface{}) map[string]interface{} {
+	if nil == obj {
 		return nil
 	}
 	data, err := json.Marshal(obj)
@@ -50,7 +53,7 @@ func StructToJsonMap(obj interface{})map[string]interface{}{
 }
 
 func getValue(obj reflect.Value) reflect.Value {
-	if  !obj.IsValid() || obj.IsZero() {
+	if !obj.IsValid() || obj.IsZero() {
 		return obj
 	}
 	switch obj.Type().Kind() {

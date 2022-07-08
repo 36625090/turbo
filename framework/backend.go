@@ -86,7 +86,7 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 			b.Logger.Error("handle request",
 				"backend", req.Backend, "endpoint",
 				req.Endpoint, "operation", req.Operation,
-				"request",utils.JSONDump(req),
+				"request", utils.JSONDump(req),
 				"error", err)
 		}
 	}()
@@ -121,7 +121,7 @@ func (b *Backend) HandleRequest(ctx context.Context, req *logical.Args) (resp *l
 		return nil, logical.NewWrapperError().
 			WithCode(codes.CodeOperationHandlerIssue).
 			WithErr(fmt.Errorf("operation headler: %s.%s.%s cannot be nil",
-			req.Backend, req.Endpoint, req.Operation))
+				req.Backend, req.Endpoint, req.Operation))
 	}
 
 	if b.HandleRequestBeforeFunc != nil {
@@ -184,7 +184,7 @@ func (b *Backend) checkEndpoint() error {
 	for _, p := range b.Endpoints {
 		for operation, handler := range p.Operations {
 			if handler.Handler() == nil {
-				return fmt.Errorf("operation callback: %s.%s.%s cannot be nil",
+				return fmt.Errorf("initialize backend operation callback: %s.%s.%s cannot be nil",
 					b.Name, p.Pattern, operation)
 			}
 		}

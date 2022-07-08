@@ -88,7 +88,8 @@ func (m *md5Signer) Verify(keyId, sign string, req Codec) error {
 	buf.WriteString(key)
 	newSign := m.md5(buf.Bytes())
 	if m.logger.IsTrace() {
-		m.logger.Trace("signature verify", "original", sign, "calculated", newSign)
+		m.logger.Trace("signature verify",
+			"original", buf.String(), "sign", sign, "verify", newSign)
 	}
 	if newSign != sign {
 		return errInvalidSign

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/36625090/turbo/logical"
 	"github.com/36625090/turbo/logical/codes"
+	"github.com/36625090/turbo/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/hashicorp/go-hclog"
 	"runtime/debug"
@@ -45,7 +46,7 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 			}
 		}()
 
-		if err := ctx.ShouldBindJSON(); err != nil {
+		if err := ctx.ShouldBind(); err != nil {
 			m.logger.Error("should not bind JSON", "path", ctx.RawRequest().RequestURI, "err", err)
 
 			ctx.WithCode(codes.CodeBindRequestData).
@@ -58,6 +59,7 @@ func (m *Transport) AddHandle(absolutePath string, method logical.HttpMethod, ha
 				"path", ctx.RawRequest().RequestURI,
 				"client", ctx.GetClientID(),
 				"sign", ctx.request.Sign,
+				"original", utils.JSONDump(ctx.request),
 				"err", err)
 			ctx.WithCode(codes.CodeInvalidSignature).
 				WithMessage("verify request sign error, " + err.Error() + " : " + ctx.Request().Sign).write()

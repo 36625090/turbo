@@ -42,8 +42,8 @@ func (c *Context) GetClientID() string {
 	return c.ctx.GetHeader(string(logical.HeaderClientIDKey))
 }
 
-func (c *Context) ShouldBindJSON() error {
-	return c.ctx.ShouldBindJSON(c.request)
+func (c *Context) ShouldBind() error {
+	return c.ctx.ShouldBind(c.request)
 }
 
 //Request 获取客户端请求数据
@@ -53,6 +53,18 @@ func (c *Context) Request() *Request {
 
 func (c *Context) RawRequest() *http.Request {
 	return c.ctx.Request
+}
+
+func (c *Context) RawWriter() gin.ResponseWriter {
+	return c.ctx.Writer
+}
+
+func (c *Context) RawParams() gin.Params {
+	return c.ctx.Params
+}
+
+func (c *Context) RawContext() *gin.Context {
+	return c.ctx
 }
 
 //DecodeArgs 解码逻辑请求数据结构
@@ -69,7 +81,7 @@ func (c *Context) DecodeArgs() (*logical.Args, error) {
 		Endpoint:   methods[1],
 		Operation:  methods[2],
 		Data:       c.request.Data,
-		Headers:    map[string][]string{},
+		Headers:    c.ctx.Request.Header,
 		Connection: &logical.Connection{RemoteAddr: c.ctx.Request.RemoteAddr, UserAgent: c.ctx.Request.UserAgent()},
 	}
 
