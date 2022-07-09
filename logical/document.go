@@ -81,6 +81,7 @@ func getFields(Type reflect.Type) []*Field {
 		if fValue == "" {
 			fValue = f.Name
 		}
+		fValue = strings.ReplaceAll(fValue, ",omitempty", "")
 		fName := f.Tag.Get("name")
 		if fName == "" {
 			fName = f.Name

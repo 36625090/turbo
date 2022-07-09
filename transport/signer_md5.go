@@ -46,9 +46,6 @@ func NewMD5Signer(settings *Settings, logger hclog.Logger) Signer {
 //keyId keys id
 func (m *md5Signer) Sign(keyId string, resp Codec) (string, error) {
 	if m.settings.DefaultPolicy == SignPolicyAllow {
-		if m.logger.IsTrace() {
-			m.logger.Trace("md5 signer default policy is allowed")
-		}
 		return "00000000000000000000000000000000", nil
 	}
 
