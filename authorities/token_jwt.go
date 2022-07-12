@@ -15,19 +15,19 @@ import (
 
 type Claims struct {
 	jwt.RegisteredClaims
-	Principal    []byte
+	Principal []byte
 }
 
 type jwtTokenHandler struct {
 	pri      *rsa.PrivateKey
 	pub      *rsa.PublicKey
 	settings *Settings
-	app string
+	app      string
 }
 
 func NewJwtTokenHandler(app string, settings *Settings) (TokenHandler, error) {
 	h := &jwtTokenHandler{
-		app: app,
+		app:      app,
 		pri:      nil,
 		pub:      nil,
 		settings: settings,
@@ -74,7 +74,7 @@ func (m *jwtTokenHandler) GenerateToken(auth *Authorized) (string, error) {
 	}
 
 	claims := Claims{}
-	claims.ID = auth.ID
+	claims.ID = auth.ID.String()
 	claims.Audience = jwt.ClaimStrings{auth.Account}
 	claims.Issuer = m.app
 	claims.Principal = enc
@@ -138,8 +138,8 @@ func (m *jwtTokenHandler) ParseToken(token string) (*Authorized, error) {
 	}
 
 	authorized := &Authorized{
-		ID:           claims.ID,
-		Principal:    principal,
+		ID:        ID(claims.ID),
+		Principal: principal,
 	}
 	if len(claims.Audience) > 0 {
 		authorized.Account = claims.Audience[0]

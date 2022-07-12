@@ -31,7 +31,7 @@ func TestNewAuthorized(t *testing.T) {
 		AuthType:        AuthTypeRedis,
 	}
 
-	handler, err := NewJwtTokenHandler(&settings)
+	handler, err := NewJwtTokenHandler("app", &settings)
 	if err != nil {
 		t.Fatal(err)
 		return
@@ -44,7 +44,6 @@ func TestNewAuthorized(t *testing.T) {
 	}
 
 	authed := NewAuthorized("12321", "liping", map[string]interface{}{})
-	authed.AccountRoles = []string{"admin", "manager"}
 	authed.Principal["location"] = "shanghai"
 
 	jwt, err := handler.GenerateToken(&authed)
