@@ -4,10 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/ryanuber/go-glob"
 	"sort"
 	"strings"
-
-	"github.com/ryanuber/go-glob"
 )
 
 // StrListContainsGlob looks for a string in a list of strings and allows
