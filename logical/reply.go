@@ -8,9 +8,7 @@ type Reply struct {
 }
 
 type Pagination struct {
-	Next       int `json:"next" name:"下一页"`
-	Prev       int `json:"prev" name:"上一页"`
-	Page       int `json:"page" name:"页码索引（从0开始）"`
+	Page       int `json:"page" name:"页码索引（从1开始）"`
 	Size       int `json:"size" name:"分页大小"`
 	Total      int `json:"total" name:"总条数"`
 	TotalPages int `json:"totalPages" name:"总页数"`

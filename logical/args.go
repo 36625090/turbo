@@ -3,6 +3,7 @@ package logical
 import (
 	"encoding/json"
 	"github.com/36625090/turbo/authorities"
+	"github.com/36625090/turbo/logical/codes"
 	"github.com/36625090/turbo/utils"
 	"github.com/go-playground/validator/v10"
 )
@@ -37,11 +38,16 @@ func (r *Args) SetTraceID(id string) *Args {
 	return r
 }
 
-func (r *Args) ShouldBindJSON(out interface{}) error {
+func (r *Args) ShouldBindJSON(out interface{}) *WrapperError {
 	if err := json.Unmarshal([]byte(r.Data.(string)), out); err != nil {
-		return err
+		return NewWrapperError().WithErr(err).
+			WithCode(codes.CodeBindRequestData)
 	}
-	return validate.Struct(out)
+	if err := validate.Struct(out); err != nil {
+		return NewWrapperError().WithErr(err).
+			WithCode(codes.CodeBindRequestData)
+	}
+	return nil
 }
 
 func (r *Args) String() string {
