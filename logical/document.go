@@ -63,6 +63,9 @@ func getFields(Type reflect.Type) []*Field {
 	defer func() {
 		recover()
 	}()
+	if Type.Kind() == reflect.Slice || Type.Kind() == reflect.Map{
+		return getFields(Type.Elem())
+	}
 	var fields []*Field
 	for i := 0; i < Type.NumField(); i++ {
 		field := new(Field)
