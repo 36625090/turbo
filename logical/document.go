@@ -63,9 +63,23 @@ func getFields(Type reflect.Type) []*Field {
 	defer func() {
 		recover()
 	}()
-	if Type.Kind() == reflect.Slice || Type.Kind() == reflect.Map{
+	switch Type.Kind() {
+	case reflect.Ptr:
+		fallthrough
+	case reflect.Map:
+		fallthrough
+	case reflect.Slice:
 		return getFields(Type.Elem())
+	case reflect.Struct:
+		if Type.Name() == "Time" {
+			field := new(Field)
+			field.Kind = "datetime"
+			field.Name = Type.Name()
+			field.Field = Type.String()
+			return []*Field{field}
+		}
 	}
+
 	var fields []*Field
 	for i := 0; i < Type.NumField(); i++ {
 		field := new(Field)
