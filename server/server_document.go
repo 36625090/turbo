@@ -35,11 +35,11 @@ func (m *Server) addDocumentSchema() {
 func (m *Server) addDocumentUI() {
 	fs := assetfs.AssetFS{Asset: ui.Asset, AssetDir: ui.AssetDir,
 		Prefix: "docs", Fallback: "index.html"}
-	path := filepath.Join(m.opts.Http.Path, "docs",  "*filepath")
+	path := filepath.Join(m.opts.Http.Path, "docs")
 	m.logger.Info("initialize handle", "path", path)
-	urlPattern := path
 	handle := createStaticHandler(path, &fs)
 
+	urlPattern := filepath.Join(path, "*filepath")
 	m.httpTransport.GET(urlPattern, handle)
 
 	m.httpTransport.HEAD(urlPattern, handle)
