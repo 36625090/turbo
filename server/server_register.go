@@ -40,7 +40,7 @@ func (m *Server) registerService(tags ...string) error {
 		CheckInterval:  "30s",
 		Port:           m.opts.Http.Port,
 		Tags:           tags,
-		HealthEndpoint: filepath.Join(m.opts.Http.Path, "/health"),
+		HealthEndpoint: filepath.Join(m.opts.Http.Path, "health"),
 		ServiceAddress: map[string]api.ServiceAddress{
 			consul.WanAddrKey: {Address: addr, Port: m.opts.Http.Port},
 		},
@@ -49,7 +49,7 @@ func (m *Server) registerService(tags ...string) error {
 }
 
 func (m *Server) listenHealthyEndpoint() {
-	path := filepath.Join(m.opts.Http.Path, "/health")
+	path := filepath.Join(m.opts.Http.Path, "health")
 	m.logger.Trace("register health backend", "path", path)
 
 	m.httpTransport.Handle("GET", path, func(c *gin.Context) {

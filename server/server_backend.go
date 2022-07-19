@@ -9,7 +9,7 @@ import (
 	"github.com/36625090/turbo/logical/codes"
 	"github.com/36625090/turbo/transport"
 	"github.com/36625090/turbo/utils"
-	"strings"
+	"path/filepath"
 )
 
 func (m *Server) InitializeBackend(bkName string, factory logical.Factory, cfg *logical.BackendContext) error {
@@ -37,7 +37,7 @@ func (m *Server) InitializeBackend(bkName string, factory logical.Factory, cfg *
 
 func (m *Server) initBackendAPIServer() {
 
-	path := strings.Join([]string{m.opts.Http.Path, "api"}, "/")
+	path := filepath.Join(m.opts.Http.Path, "api")
 	if m.opts.Http.Trace {
 		m.httpTransport.Use(m.loggerTracker(path))
 	}
